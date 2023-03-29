@@ -1,4 +1,6 @@
 mod tests;
+use std::ops::Range;
+
 use lifering::FloatingPointComponents;
 use logos::{Filter, Lexer, Logos};
 
@@ -222,6 +224,15 @@ impl<'a> Token<'a> {
             .filter(|tok| !matches!(tok, &Token::Newline))
             .collect::<Vec<_>>()
     }
+
+    /// Returns a vector of `([Token], [Range<usize>])`
+    #[inline]
+    pub fn lex_spanned(source: &'a str) -> Vec<(Self, Range<usize>)> {
+        Self::lexer(source)
+            .spanned()
+            .filter(|(tok, _)| !matches!(tok, &Token::Newline))
+            .collect::<Vec<_>>()
+    }
 }
 
 fn comment<'a>(lex: &mut Lexer<'a, Token<'a>>) -> Filter<()> {
@@ -251,4 +262,10 @@ fn string_literal<'a>(lex: &mut Lexer<'a, Token<'a>>) -> &'a str {
 #[inline]
 pub fn lex(source: &str) -> Vec<Token> {
     Token::lex(source)
+}
+
+/// Returns a vector of `(Token, Range<usize>)`.
+#[inline]
+pub fn lex_spanned<'a>(source: &'a str) -> Vec<(Token<'a>, Range<usize>)> {
+    Token::lex_spanned(source)
 }
