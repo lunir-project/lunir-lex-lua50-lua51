@@ -1,6 +1,6 @@
 [package]
 name = "lunir-lex-lua50-lua51"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "A lexer for Lua 5.0 and Lua 5.1."
 license = "MIT OR Apache-2.0"
