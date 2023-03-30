@@ -1,5 +1,5 @@
 mod tests;
-use std::ops::Range;
+use std::{borrow::Cow, fmt::Display, ops::Range};
 
 use lifering::FloatingPointComponents;
 use logos::{Filter, Lexer, Logos};
@@ -214,6 +214,70 @@ pub enum Token<'a> {
     /// The "`while`" keyword.
     #[token("while")]
     While,
+}
+
+impl<'a> Display for Token<'a> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Token::Add => Cow::Borrowed(" + "),
+                Token::And => Cow::Borrowed(" and "),
+                Token::Assign => Cow::Borrowed(" = "),
+                Token::Break => Cow::Borrowed("break"),
+                Token::CloseBracket => Cow::Borrowed("]"),
+                Token::CloseCurly => Cow::Borrowed("} "),
+                Token::CloseParen => Cow::Borrowed(") "),
+                Token::Colon => Cow::Borrowed(": "),
+                Token::Comma => Cow::Borrowed(", "),
+                Token::CommentStart => Cow::Borrowed("--"),
+                Token::Concat => Cow::Borrowed(" .. "),
+                Token::Divide => Cow::Borrowed(" / "),
+                Token::Do => Cow::Borrowed("do"),
+                Token::Else => Cow::Borrowed("else"),
+                Token::ElseIf => Cow::Borrowed("elseif "),
+                Token::End => Cow::Borrowed("end"),
+                Token::Eq => Cow::Borrowed(" == "),
+                Token::Error => Cow::Borrowed("[ERROR]"),
+                Token::Exponentiate => Cow::Borrowed(" ^ "),
+                Token::False => Cow::Borrowed("false"),
+                Token::For => Cow::Borrowed("for "),
+                Token::Function => Cow::Borrowed("function"),
+                Token::Ge => Cow::Borrowed(" >= "),
+                Token::Gt => Cow::Borrowed(" <= "),
+                Token::Identifier(ident) => Cow::Borrowed(*ident),
+                Token::If => Cow::Borrowed("if "),
+                Token::In => Cow::Borrowed("in "),
+                Token::Le => Cow::Borrowed(" <= "),
+                Token::Local => Cow::Borrowed("local "),
+                Token::Lt => Cow::Borrowed(" < "),
+                Token::Multiply => Cow::Borrowed(" * "),
+                Token::Ne => Cow::Borrowed(" ~= "),
+                Token::Newline => Cow::Borrowed("\n"),
+                Token::Nil => Cow::Borrowed("nil"),
+                Token::Not => Cow::Borrowed("not "),
+                Token::Number(num) => Cow::Owned(num.as_f64().to_string()),
+                Token::OpenBracket => Cow::Borrowed("["),
+                Token::OpenCurly => Cow::Borrowed("{"),
+                Token::OpenParen => Cow::Borrowed("("),
+                Token::Or => Cow::Borrowed(" or "),
+                Token::Period => Cow::Borrowed("."),
+                Token::Repeat => Cow::Borrowed("repeat "),
+                Token::Return => Cow::Borrowed("return"),
+                Token::Semicolon => Cow::Borrowed("; "),
+                Token::StringLiteral(lit) => {
+                    Cow::Owned(format!("{:?}", lit))
+                }
+                Token::Subtract => Cow::Borrowed("- "),
+                Token::Then => Cow::Borrowed("then "),
+                Token::True => Cow::Borrowed("true"),
+                Token::Until => Cow::Borrowed("until "),
+                Token::Vararg => Cow::Borrowed("..."),
+                Token::While => Cow::Borrowed("while "),
+            }
+        )
+    }
 }
 
 impl<'a> Token<'a> {
